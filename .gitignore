@@ -1,0 +1,8 @@
+*.o
+*.a
+*.out
+*.gch
+*.json
+main.c
+.vscode
+.obj

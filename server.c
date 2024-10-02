@@ -6,13 +6,13 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:02:14 by epinaud           #+#    #+#             */
-/*   Updated: 2024/09/29 23:48:39 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/02 00:59:45 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#define _POSIX_SOURCE
 #include <signal.h>
-#include <errno.h>
-#include <strings.h>
+#include "libft/libft.h"
 
 void sigint_handler(int sig)
 {
