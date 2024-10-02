@@ -6,7 +6,7 @@
 #    By: epinaud <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/25 16:30:14 by epinaud           #+#    #+#              #
-#    Updated: 2024/10/02 17:16:35 by epinaud          ###   ########.fr        #
+#    Updated: 2024/10/02 20:58:13 by epinaud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,19 +24,23 @@ NAME = server.a
 
 OBJ_DIR = .obj
 
-CC = cc -D_XOPEN_SOURCE=700
+CC = cc
 
 $(OBJ_DIR)/%.o : %.c
-	$(CC) -c $(CFLAGS) -o $@ $<
+	@$(CC) -D_XOPEN_SOURCE=700 -c $(CFLAGS) -o $@ $<
 
-all: server
+all: libft server
+
+libft :
+	@git -C libft pull
+	@make -C libft
+
+relibft:
+	@git -C libft pull
+	@make re -C libft
 
 $(NAME): $(OBJ_DIR) $(OBJ)
 	ar rcs $(NAME) $(OBJ)
-
-libft/libft.a:
-	git -C libft pull
-	-C libft make
 
 server: $(NAME) $(LIBFT)
 	$(CC) $(CFLAGS) -o $@ $^
@@ -46,11 +50,13 @@ server: $(NAME) $(LIBFT)
 
 clean:
 	@rm -f $(OBJ_ALL)
+	@make clean -C libft
 
 fclean:  clean
 	@rm -f $(NAME)
 	@rm -rf $(OBJ_DIR)
+	@make fclean -C libft
 
-re: fclean server
+re: fclean relibft server
 
-.PHONY:  all clean fclean re bonus
+.PHONY:  all clean fclean re bonus libft relibft
