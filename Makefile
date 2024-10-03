@@ -6,30 +6,46 @@
 #    By: epinaud <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/25 16:30:14 by epinaud           #+#    #+#              #
-#    Updated: 2024/10/02 20:58:13 by epinaud          ###   ########.fr        #
+#    Updated: 2024/10/03 15:29:35 by epinaud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC_FILES = server.c
+CLNT_SRC = client.c
   
-OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
+CLNT_OBJ = $(addprefix $(OBJ_DIR)/, $(CLNT_SRC:.c=.o))
 
-OBJ_ALL = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
+SRV_SRC = server.c
+
+SRV_OBJ = $(addprefix $(OBJ_DIR)/, $(SRV_SRC:.c=.o))
 
 LIBFT = libft/libft.a
 
 CFLAGS = -Wall -Wextra -Werror -I.
 
-NAME = server.a
+SRV_NAME = server.a
+
+CLNT_NAME = client.a
 
 OBJ_DIR = .obj
 
-CC = cc
+CC = cc -D_XOPEN_SOURCE=700 
 
 $(OBJ_DIR)/%.o : %.c
-	@$(CC) -D_XOPEN_SOURCE=700 -c $(CFLAGS) -o $@ $<
+	$(CC) -c $(CFLAGS) -o $@ $<
 
-all: libft server
+all: libft server client
+
+server: $(SRV_NAME) $(LIBFT)
+	$(CC) $(CFLAGS) -o $@ $^
+
+client: $(CLNT_NAME) $(LIBFT)
+	$(CC) $(CFLAGS) -o $@ $^
+
+$(SRV_NAME): $(OBJ_DIR) $(SRV_OBJ)
+	ar rcs $(SRV_NAME) $(SRV_OBJ)
+
+$(CLNT_NAME): $(OBJ_DIR) $(CLNT_OBJ)
+	ar rcs $(CLNT_NAME) $(CLNT_OBJ)
 
 libft :
 	@git -C libft pull
@@ -39,24 +55,18 @@ relibft:
 	@git -C libft pull
 	@make re -C libft
 
-$(NAME): $(OBJ_DIR) $(OBJ)
-	ar rcs $(NAME) $(OBJ)
-
-server: $(NAME) $(LIBFT)
-	$(CC) $(CFLAGS) -o $@ $^
-
 .obj:
 	@mkdir -p .obj
 
 clean:
-	@rm -f $(OBJ_ALL)
+	@rm -f server client
 	@make clean -C libft
 
 fclean:  clean
-	@rm -f $(NAME)
+	@rm -f $(SRV_NAME) $(CLNT_NAME)
 	@rm -rf $(OBJ_DIR)
 	@make fclean -C libft
 
-re: fclean relibft server
+re: fclean relibft server client
 
 .PHONY:  all clean fclean re bonus libft relibft

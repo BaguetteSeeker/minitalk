@@ -9,3 +9,4 @@ main.c
 *.out
 *.json
 *.vscode
+.txt

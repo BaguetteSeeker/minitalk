@@ -1,0 +1,1 @@
+- Make sure to save errno at the start of sigaction handlers and restore it once they're over

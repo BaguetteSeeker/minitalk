@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:02:14 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/02 16:46:11 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/03 15:00:18 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 #define _XOPEN_SOURCE 700
 #include <signal.h>
 #include "libft/libft.h"
+#include <stdio.h>
 
 
 void sigint_handler(int sig)
 {
-	if (sig == SIGUSR1)
-	{
-		ft_printf("Signal sent from client");
-	}
+	if (sig == SIGINT)
+		ft_printf("\nSIGINT prevented\n");
+	else if (sig == SIGUSR1)
+		ft_printf("\nNew chain received\n");
 }
 
 static void set_sigaction(void)
@@ -37,7 +38,7 @@ int	main(void)
 {
 	set_sigaction();
 	
-	ft_printf("PID -> %d", getpid());
+	ft_printf("Server starting..\n PID -> %d\n", getpid());
 	while (1)
 		continue ;
 	return (0);
