@@ -6,17 +6,17 @@
 #    By: epinaud <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/25 16:30:14 by epinaud           #+#    #+#              #
-#    Updated: 2024/10/03 15:29:35 by epinaud          ###   ########.fr        #
+#    Updated: 2024/10/04 02:40:23 by epinaud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-CLNT_SRC = client.c
-  
-CLNT_OBJ = $(addprefix $(OBJ_DIR)/, $(CLNT_SRC:.c=.o))
 
 SRV_SRC = server.c
 
 SRV_OBJ = $(addprefix $(OBJ_DIR)/, $(SRV_SRC:.c=.o))
+
+CLNT_SRC = client.c
+  
+CLNT_OBJ =$(addprefix $(OBJ_DIR)/, $(CLNT_SRC:.c=.o))
 
 LIBFT = libft/libft.a
 
