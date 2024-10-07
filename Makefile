@@ -6,7 +6,7 @@
 #    By: epinaud <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/25 16:30:14 by epinaud           #+#    #+#              #
-#    Updated: 2024/10/04 02:40:23 by epinaud          ###   ########.fr        #
+#    Updated: 2024/10/07 12:20:46 by epinaud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,10 +35,10 @@ $(OBJ_DIR)/%.o : %.c
 
 all: libft server client
 
-server: $(SRV_NAME) $(LIBFT)
+server: $(LIBFT) $(SRV_NAME)
 	$(CC) $(CFLAGS) -o $@ $^
 
-client: $(CLNT_NAME) $(LIBFT)
+client: $(LIBFT) $(CLNT_NAME)
 	$(CC) $(CFLAGS) -o $@ $^
 
 $(SRV_NAME): $(OBJ_DIR) $(SRV_OBJ)
