@@ -6,7 +6,7 @@
 #    By: epinaud <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/25 16:30:14 by epinaud           #+#    #+#              #
-#    Updated: 2024/10/07 12:20:46 by epinaud          ###   ########.fr        #
+#    Updated: 2024/10/07 16:50:07 by epinaud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,17 +35,17 @@ $(OBJ_DIR)/%.o : %.c
 
 all: libft server client
 
-server: $(LIBFT) $(SRV_NAME)
-	$(CC) $(CFLAGS) -o $@ $^
-
-client: $(LIBFT) $(CLNT_NAME)
-	$(CC) $(CFLAGS) -o $@ $^
-
 $(SRV_NAME): $(OBJ_DIR) $(SRV_OBJ)
 	ar rcs $(SRV_NAME) $(SRV_OBJ)
 
 $(CLNT_NAME): $(OBJ_DIR) $(CLNT_OBJ)
 	ar rcs $(CLNT_NAME) $(CLNT_OBJ)
+
+server: $(SRV_NAME) $(LIBFT)
+	$(CC) $(CFLAGS) -o $@ $^
+
+client: $(CLNT_NAME) $(LIBFT)
+	$(CC) $(CFLAGS) -o $@ $^
 
 libft :
 	@git -C libft pull
