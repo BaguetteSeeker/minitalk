@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 12:29:06 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/07 18:34:26 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/09 16:44:51 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	send_strasbin(int pid, char *str)
 					return (ft_printf("Error during signal transmission : transfer aborted\n"));
 			}
 			bit >>= 1;
-			//pause();
+			pause();
 		}
 		ft_putchar_fd('\n', 1);
 		str++;
@@ -51,12 +51,39 @@ static int	send_strasbin(int pid, char *str)
 	return (0);
 }
 
+void signals_handler(int sig, siginfo_t *siginfo, void *context)
+{
+	(void) context;
+	(void) siginfo;
+	(void) sig;
+	
+	//if (sig == SIGUSR2)
+		//ft_printf("Signals properly translated to char; Client continue;\n");
+	//else if (sig == SIGUSR1)
+		//ft_printf("Failled to convert signals to char, closing client;\n");
+}
+
+static void set_sigaction(void (sighandle)(int, siginfo_t *, void *))
+{
+	struct sigaction act;
+
+	ft_bzero(&act, sizeof(act));
+	sigemptyset(&act.sa_mask);
+	act.sa_flags = SA_SIGINFO;
+	act.sa_sigaction = sighandle;
+	if (sigaction(SIGINT, &act, NULL) < 0)
+		return ;
+	if (sigaction(SIGUSR1, &act, NULL) < 0)
+		return ;	
+	if (sigaction(SIGUSR2, &act, NULL) < 0)
+		return ;
+}
+
 int	main(int argc, char *argv[])
 {
+	set_sigaction(&signals_handler);
 	if (argc != 3)
 		return (printerr("Insufficient params count during client call to main\n"));
-
 	send_strasbin(ft_atoi(argv[1]), argv[2]);
-
 	return (0);
 }
