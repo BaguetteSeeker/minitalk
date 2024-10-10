@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 12:29:06 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/09 16:44:51 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/10 19:26:17 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,11 @@ static void set_sigaction(void (sighandle)(int, siginfo_t *, void *))
 
 int	main(int argc, char *argv[])
 {
-	set_sigaction(&signals_handler);
 	if (argc != 3)
-		return (printerr("Insufficient params count during client call to main\n"));
+		return (printerr("Invalid param count sent to client\n"));
+	if (ft_atoi(argv[1]) < 1)
+		return (printerr("Invalid PID\n"));
+	set_sigaction(&signals_handler);
 	send_strasbin(ft_atoi(argv[1]), argv[2]);
 	return (0);
 }
