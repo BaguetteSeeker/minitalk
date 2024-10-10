@@ -15,3 +15,10 @@ ERRORS
 
 - Make sure to save errno at the start of sigaction handlers and restore it once they're over
 - Remember to remove gnl from the lib (forbidden use of read)
+
+If (!previous client || current client != previous client)
+       show client
+       if (!clienttrackers == initialized)
+              initialize
+       else 
+              pursue byte decoding / printing
