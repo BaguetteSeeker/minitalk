@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:02:14 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/09 18:20:37 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/10 19:20:53 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,16 @@
 #include <signal.h>
 #include "libft/libft.h"
 #include <stdio.h>
+
+typedef struct s_client
+{
+	int		client_pid;
+	char *	msg;
+	unsigned char	c;
+	int counter;
+}			client;
+
+client	cl[100];
 
 static int	printerr(char *err)
 {
