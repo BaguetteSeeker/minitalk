@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:02:14 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/10 19:20:53 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/10 19:53:29 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,13 @@ typedef struct s_client
 	int counter;
 }			client;
 
-client	cl[100];
+static void	init_client_vars(unsigned char *c, int *counter, char *str)
+{
+	*c = 0;
+	*counter = 128;
+	free(str);
+	str = malloc(sizeof(char) * 1);
+}
 
 static int	printerr(char *err)
 {
@@ -32,23 +38,40 @@ static int	printerr(char *err)
 	return (1);
 }
 
+static char	*expand_str(char *str, char c)
+{
+	char	*grown_str;
+
+	if (c)
+		ft_putstr_fd("Char is true", 1);
+	grown_str = malloc(sizeof(char) * (ft_strlen(str) + 1 + 1));
+	//assign new memory from old chain
+	free(str);
+	return (grown_str);
+}
+
 void signals_handler(int sig, siginfo_t *siginfo, void *context)
 {
 	static unsigned char	c = 0;
 	static int	counter = 0x80;
+	static char	*str;
 	(void)context;
 
 	if (sig == SIGUSR1)
-	{
 		c += counter;
-		//ft_printf("1");
-	}
 	counter /= 2;
 	if (counter == 0)
 	{
-		//ft_printf("New char %d\n", c);
-		ft_putchar_fd(c, 1);
-		//ft_putchar_fd('|', 1);
+		if (c == '\0')
+		{
+			ft_putstr_fd(str, 1);
+			//reset str here and remove it from  client vars
+		}
+		else
+			str = expand_str(str, c);
+
+		init_client_vars(&c, &counter, str);
+		//ft_putchar_fd(c, 1);
 		//ft_putchar_fd('\n', 1);
 		c = 0;
 		counter = 0x80;
