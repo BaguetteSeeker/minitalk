@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 12:29:06 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/10 19:26:17 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/11 12:43:16 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	send_strasbin(int pid, char *str)
 {
 	unsigned char   bit;
 
-	while (*str)
+	while (1)
 	{
 		bit = 0b10000000;
 		while (bit > 0)
@@ -46,6 +46,8 @@ static int	send_strasbin(int pid, char *str)
 			pause();
 		}
 		ft_putchar_fd('\n', 1);
+		if (*str == '\0')
+			break;
 		str++;
 	}
 	return (0);
