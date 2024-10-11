@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 12:29:06 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/11 13:44:19 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/11 14:24:17 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ static int	printerr(char *err)
 	return (1);
 }
 
-static int	send_charasbin(int pid, char *comlen)
+static int	send_charasbin(int pid, char msg)
 {
 	unsigned char	bit;
 	bit = 0b10000000;
 	while (bit > 0)
 	{
-		if (bit & (unsigned char)*comlen)
+		if (bit & (unsigned char)msg)
 		{
 			ft_printf("1");
 			if (kill(pid, SIGUSR1) < 0)
@@ -45,21 +45,21 @@ static int	send_charasbin(int pid, char *comlen)
 	return (0);
 }
 
-static int	send_strasbin(int pid, char *str)
+static int	send_strasbin(int pid, char *msg)
 {
 	unsigned char   bit;
-	char	*comlen;
+	char	*msglen;
 
-	comlen = ft_itoa(pid);
-	while (*comlen)
-		send_strasbin(pid, *comlen++);
+	msglen = ft_itoa(ft_strlen(msg));
+	while (*msglen)
+		send_charasbin(pid, *msglen++);
 
 	while (1)
 	{
 		bit = 0b10000000;
 		while (bit > 0)
 		{
-			if (bit & (unsigned char)*str)
+			if (bit & (unsigned char)*msg)
 			{
 				ft_printf("1");
 				if (kill(pid, SIGUSR1) < 0)
@@ -75,9 +75,9 @@ static int	send_strasbin(int pid, char *str)
 			pause();
 		}
 		ft_putchar_fd('\n', 1);
-		if (*str == '\0')
+		if (*msg == '\0')
 			break;
-		str++;
+		msg++;
 	}
 	return (0);
 }
