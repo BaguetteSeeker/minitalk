@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 12:29:06 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/11 12:43:16 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/11 13:44:19 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,38 @@ static int	printerr(char *err)
 	return (1);
 }
 
+static int	send_charasbin(int pid, char *comlen)
+{
+	unsigned char	bit;
+	bit = 0b10000000;
+	while (bit > 0)
+	{
+		if (bit & (unsigned char)*comlen)
+		{
+			ft_printf("1");
+			if (kill(pid, SIGUSR1) < 0)
+				return (ft_printf("Error during signal transmission : transfer aborted\n"));
+		}
+		else
+		{
+			ft_printf("0");
+			if (kill(pid, SIGUSR2) < 0)
+				return (ft_printf("Error during signal transmission : transfer aborted\n"));
+		}
+		bit >>= 1;
+		pause();
+	}
+	return (0);
+}
+
 static int	send_strasbin(int pid, char *str)
 {
 	unsigned char   bit;
+	char	*comlen;
+
+	comlen = ft_itoa(pid);
+	while (*comlen)
+		send_strasbin(pid, *comlen++);
 
 	while (1)
 	{
