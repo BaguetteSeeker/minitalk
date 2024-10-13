@@ -6,13 +6,13 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:16:17 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/14 01:24:12 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/14 01:35:39 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-static void set_sigaction(void (sighandle)(int, siginfo_t *, void *))
+void set_sigaction(void (sighandle)(int, siginfo_t *, void *))
 {
 	struct sigaction act;
 

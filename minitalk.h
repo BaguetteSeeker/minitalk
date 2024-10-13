@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:20:11 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/14 01:24:09 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/14 01:36:06 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,5 @@ typedef struct s_client
 	int		counter;
 }			client;
 
-static void set_sigaction(void (sighandle)(int, siginfo_t *, void *));
+void set_sigaction(void (sighandle)(int, siginfo_t *, void *));
 #endif
