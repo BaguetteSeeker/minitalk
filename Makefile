@@ -6,15 +6,15 @@
 #    By: epinaud <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/25 16:30:14 by epinaud           #+#    #+#              #
-#    Updated: 2024/10/07 16:50:07 by epinaud          ###   ########.fr        #
+#    Updated: 2024/10/14 01:41:46 by epinaud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRV_SRC = server.c
+SRV_SRC = server.c minitalk_utils.c
 
 SRV_OBJ = $(addprefix $(OBJ_DIR)/, $(SRV_SRC:.c=.o))
 
-CLNT_SRC = client.c
+CLNT_SRC = client.c minitalk_utils.c
   
 CLNT_OBJ =$(addprefix $(OBJ_DIR)/, $(CLNT_SRC:.c=.o))
 
