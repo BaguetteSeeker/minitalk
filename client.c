@@ -6,14 +6,14 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 12:29:06 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/13 22:47:51 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/14 01:22:24 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #define _POSIX_SOURCE 200809L
 #define _XOPEN_SOURCE 700
-#include <signal.h>
 #include "libft/libft.h"
+#include "minitalk.h"
 
 static int	send_byte(int pid, char c)
 {
@@ -43,7 +43,7 @@ static int	send_byte(int pid, char c)
 
 static int	send_intasbin(int pid, unsigned int integer)
 {
-	unsigned long int	bit_msk;
+	unsigned int	bit_msk;
 	unsigned char	byte;
 	size_t			counter;
 
@@ -111,7 +111,7 @@ static void set_sigaction(void (sighandle)(int, siginfo_t *, void *))
 
 int	check_PID(char *pid)
 {
-	while (*pid)
+	while (*pid++)
 	{
 		if (!ft_strchr("0123456789", *pid))
 			return (1);
@@ -131,5 +131,3 @@ int	main(int argc, char *argv[])
 	send_strasbin(ft_atoi(argv[1]), argv[2]);
 	return (0);
 }
-
-//Error
