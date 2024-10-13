@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 12:29:06 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/11 14:24:17 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/13 22:47:51 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,14 @@
 #include <signal.h>
 #include "libft/libft.h"
 
-static int	printerr(char *err)
-{
-	ft_printf("%s", err);
-	return (1);
-}
-
-static int	send_charasbin(int pid, char msg)
+static int	send_byte(int pid, char c)
 {
 	unsigned char	bit;
+
 	bit = 0b10000000;
 	while (bit > 0)
 	{
-		if (bit & (unsigned char)msg)
+		if (bit & (unsigned char)c)
 		{
 			ft_printf("1");
 			if (kill(pid, SIGUSR1) < 0)
@@ -42,38 +37,44 @@ static int	send_charasbin(int pid, char msg)
 		bit >>= 1;
 		pause();
 	}
+	ft_putchar_fd('\n', 1);
+	return (0);
+}
+
+static int	send_intasbin(int pid, unsigned int integer)
+{
+	unsigned long int	bit_msk;
+	unsigned char	byte;
+	size_t			counter;
+
+	counter = 0;
+	byte = 0;
+	bit_msk = 0b10000000000000000000000000000000;
+	while (bit_msk > 0)
+	{
+		counter++;
+		if (bit_msk & integer)
+			byte += bit_msk;
+		if (counter / 8)
+		{
+			send_byte(pid, byte);
+			byte = 0;
+			counter = 0;
+		}
+		bit_msk >>= 1;
+	}
 	return (0);
 }
 
 static int	send_strasbin(int pid, char *msg)
 {
-	unsigned char   bit;
-	char	*msglen;
+	unsigned int	msglen;
 
-	msglen = ft_itoa(ft_strlen(msg));
-	while (*msglen)
-		send_charasbin(pid, *msglen++);
-
+	msglen = ft_strlen(msg);	
+	send_intasbin(pid, msglen);
 	while (1)
 	{
-		bit = 0b10000000;
-		while (bit > 0)
-		{
-			if (bit & (unsigned char)*msg)
-			{
-				ft_printf("1");
-				if (kill(pid, SIGUSR1) < 0)
-					return (ft_printf("Error during signal transmission : transfer aborted\n"));
-			}
-			else
-			{
-				ft_printf("0");
-				if (kill(pid, SIGUSR2) < 0)
-					return (ft_printf("Error during signal transmission : transfer aborted\n"));
-			}
-			bit >>= 1;
-			pause();
-		}
+		send_byte(pid, *msg);
 		ft_putchar_fd('\n', 1);
 		if (*msg == '\0')
 			break;
@@ -102,21 +103,33 @@ static void set_sigaction(void (sighandle)(int, siginfo_t *, void *))
 	sigemptyset(&act.sa_mask);
 	act.sa_flags = SA_SIGINFO;
 	act.sa_sigaction = sighandle;
-	if (sigaction(SIGINT, &act, NULL) < 0)
-		return ;
 	if (sigaction(SIGUSR1, &act, NULL) < 0)
 		return ;	
 	if (sigaction(SIGUSR2, &act, NULL) < 0)
 		return ;
 }
 
+int	check_PID(char *pid)
+{
+	while (*pid)
+	{
+		if (!ft_strchr("0123456789", *pid))
+			return (1);
+	}
+	return (0);
+}
+
 int	main(int argc, char *argv[])
 {
 	if (argc != 3)
-		return (printerr("Invalid param count sent to client\n"));
-	if (ft_atoi(argv[1]) < 1)
-		return (printerr("Invalid PID\n"));
+		return (ft_printf("Invalid param count sent to client\n"));
+	else if (ft_strlen(argv[1]) < 1)
+		return (ft_printf("Invalid PID\n"));
+	else if (check_PID(argv[1]))
+		return (ft_printf("Invalid character.s within PID"));
 	set_sigaction(&signals_handler);
 	send_strasbin(ft_atoi(argv[1]), argv[2]);
 	return (0);
 }
+
+//Error
