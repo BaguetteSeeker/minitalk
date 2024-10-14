@@ -6,42 +6,43 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:02:14 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/14 02:44:32 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/14 14:11:20 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-//client client_lst[];
+t_client clients[100];
 
-static int	printerr(char *err)
+static t_client	init_client(t_client *client)
 {
-	ft_printf("%s", err);
-	return (1);
+
+	client->pid = 0;
+	client->msglen = 0;
+	client->msg = NULL;
+	client->c = 0;
+	client->byte_mask = 0x80;
+	client->mxint_mask = 0x7FFFFFFF;
+	return (*client);
 }
 
-// static void	init_client_vars(unsigned char *c, int *counter, char *str)
-// {
-// 	*c = 0;
-// 	*counter = 128;
-// 	free(str);
-// 	str = malloc(sizeof(char) * 1);
-// }
+static t_client	fetch_client(t_client *client, int pid, int client_table[100])
+{
+	size_t	i;
 
-// static char	*expand_str(char *str, char c)
-// {
-// 	char	*grown_str;
-
-// 	if (c)
-// 		ft_putstr_fd("Char is true", 1);
-// 	grown_str = malloc(sizeof(char) * (ft_strlen(str) + 1 + 1));
-// 	//assign new memory from old chain
-// 	free(str);
-// 	return (grown_str);
-// }
+	i = 0;
+	while (i++ < 100)
+	{
+		if (client_table[i] == pid)
+			return (clients[i]);
+	}
+	return (init_client(client));
+}
 
 void signals_handler(int sig, siginfo_t *siginfo, void *context)
 {
+	t_client	client;
+	static int	client_table[100];
 	static unsigned char	c = 0;
 	static int	bit_mask = 0x80;
 	static int	msglen = 0;
@@ -49,6 +50,8 @@ void signals_handler(int sig, siginfo_t *siginfo, void *context)
 	static unsigned int	mxint_mask = 0b10000000000000000000000000000000;
 	static char	*msg;
 	(void)context;
+
+	fetch_client(&client, siginfo->si_pid, client_table);
 
 	//Check struct, if pid exist fetch progression else init struct
 	//if msglen == -1 if combytescount != 4 : msglen += parse_byte()
@@ -76,9 +79,9 @@ void signals_handler(int sig, siginfo_t *siginfo, void *context)
 		{
 			if (c == '\0')
 			{
-				//*msg = c;
+				*msg = c;
 				ft_putstr_fd(msg - msglen, 1);
-				ft_printf("\nSuccess; Client transmission over;\n");
+				//ft_printf("\nSuccess; Client transmission over;\n");
 				free(msg - msglen);
 				mxint_mask = 0b10000000000000000000000000000000;
 				bits_counter =  0;
@@ -96,9 +99,9 @@ void signals_handler(int sig, siginfo_t *siginfo, void *context)
 		}
 	}
 	if (siginfo->si_pid == 0)
-        printerr("Server missing client's PID\n");
+        ft_printf("Server missing client's PID\n");
     if (kill(siginfo->si_pid, SIGUSR2) == -1)
-        printerr("Error in returning signal (to client)\n");
+        ft_printf("Error in returning signal (to client)\n");
 }
 
 int	main(void)
