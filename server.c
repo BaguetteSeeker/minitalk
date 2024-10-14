@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:02:14 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/14 14:58:39 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/14 16:09:20 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@ static t_client	init_client(int pid)
 	client.msg = NULL;
 	client.c = 0;
 	client.byte_mask = 0x80;
-	client.mxint_mask = 0x7FFFFFFF;
+	client.mxint_mask = 0b1000000000000000000000000000000;
 	return (client);
 }
 
-static t_client	*fetch_client(int pid, int client_table[100])
+static t_client	*fetch_client(int pid)
 {
+	static int	client_table[100];
 	size_t	i;
 
 	i = 0;
@@ -39,7 +40,7 @@ static t_client	*fetch_client(int pid, int client_table[100])
 	}
 	i = 0;
 	while (client_table[i])
-		client_table++;
+		i++;
 	clients[i] = init_client(pid);
 	client_table[i] = pid;
 	return (&clients[i]);
@@ -48,60 +49,54 @@ static t_client	*fetch_client(int pid, int client_table[100])
 void signals_handler(int sig, siginfo_t *siginfo, void *context)
 {
 	t_client	*client;
-	static int	client_table[100];
-	static unsigned char	c = 0;
-	static int	bit_mask = 0x80;
-	static int	msglen = 0;
-	static unsigned int	mxint_mask = 0b10000000000000000000000000000000;
-	static char	*msg;
 	static int	bits_counter = 0;
 	(void)context;
 
-	client = fetch_client(siginfo->si_pid, client_table);
-	//ft_printf("Client pid is %d\n", client.pid);
-	//Check struct, if pid exist fetch progression else init struct
-	//if msglen == -1 if combytescount != 4 : msglen += parse_byte()
-	//else parse msg
+	client = fetch_client(siginfo->si_pid);
 	bits_counter++;
-	if (mxint_mask > 0)
+	if (client->mxint_mask > 0)
 	{
+			//ft_printf("Msglen is %d\n", client->msglen);
 		if (sig == SIGUSR1)
-			msglen += mxint_mask;
-		mxint_mask >>= 1;
+		{
+			//ft_printf("Received bit 1 \nMsglen is %d\n", client->msglen);
+			client->msglen += client->mxint_mask;
+		}
+		client->mxint_mask >>= 1;
 		if (bits_counter == 32)
 		{
-			ft_printf("Bits counter is %d\n", bits_counter);
-			msg = malloc((msglen + 1) * sizeof(char));
+			ft_printf("Bits counter is %d\nClient msglen is %d\n", bits_counter, client->msglen);
+			client->msg = malloc((client->msglen + 1) * sizeof(char));
 			bits_counter = 0;
 		}
-		//return ;
 	}
 	else
 	{
 		if (sig == SIGUSR1)
-			c += bit_mask;
-		bit_mask /= 2;
-		if (bit_mask == 0)
+			client->c += client->byte_mask;
+		client->byte_mask /= 2;
+		if (client->byte_mask == 0)
 		{
-			if (c == '\0')
+			if (client->c == '\0')
 			{
-				*msg = c;
-				ft_putstr_fd(msg - msglen, 1);
-				//ft_printf("\nSuccess; Client transmission over;\n");
-				free(msg - msglen);
-				mxint_mask = 0b10000000000000000000000000000000;
+				*(client->msg) = client->c;
+				client->msg -= client->msglen;
+				ft_putstr_fd(client->msg, 1);
+				client->mxint_mask = 0b1000000000000000000000000000000;
 				bits_counter =  0;
-				msg = NULL;
-				msglen = 0;
-				//Maybe end of messGE SUCH AS : Cliend <pid> successfully transmission over
-				//Free *str / reset struct
+				free(client->msg);
+				client->msg = NULL;
+				client->msglen = 0;
+				//client = NULL;
+				ft_printf("\nSuccess; Client %d transmission over;\n", client->pid);
 			}
 			else
-				*msg++ = c;
-			//init_client_vars(&c, &counter, str);
-			//ft_putchar_fd('\n', 1);
-			c = 0;
-			bit_mask = 0x80;
+			{
+				*(client->msg) = client->c;
+				client->msg++;
+			}
+			client->c = 0;
+			client->byte_mask = 0x80;
 		}
 	}
 	if (siginfo->si_pid == 0)
