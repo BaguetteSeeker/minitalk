@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:02:14 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/14 02:06:05 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/14 02:44:32 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,14 @@ void signals_handler(int sig, siginfo_t *siginfo, void *context)
 		{
 			if (c == '\0')
 			{
-				ft_putstr_fd(msg - bits_counter / 8, 1);
-				ft_printf("'\n'Success; Client transmission over;\n");
-				free(msg - bits_counter / 8);
+				//*msg = c;
+				ft_putstr_fd(msg - msglen, 1);
+				ft_printf("\nSuccess; Client transmission over;\n");
+				free(msg - msglen);
+				mxint_mask = 0b10000000000000000000000000000000;
+				bits_counter =  0;
+				msg = NULL;
+				msglen = 0;
 				//Maybe end of messGE SUCH AS : Cliend <pid> successfully transmission over
 				//Free *str / reset struct
 			}
