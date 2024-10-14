@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 12:29:06 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/14 01:22:24 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/14 01:49:03 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,10 @@ static int	send_strasbin(int pid, char *msg)
 
 	msglen = ft_strlen(msg);	
 	send_intasbin(pid, msglen);
+	ft_putchar_fd('\n', 1);
 	while (1)
 	{
 		send_byte(pid, *msg);
-		ft_putchar_fd('\n', 1);
 		if (*msg == '\0')
 			break;
 		msg++;
@@ -93,20 +93,6 @@ void signals_handler(int sig, siginfo_t *siginfo, void *context)
 		//ft_printf("Signals properly translated to char; Client continue;\n");
 	//else if (sig == SIGUSR1)
 		//ft_printf("Failled to convert signals to char, closing client;\n");
-}
-
-static void set_sigaction(void (sighandle)(int, siginfo_t *, void *))
-{
-	struct sigaction act;
-
-	ft_bzero(&act, sizeof(act));
-	sigemptyset(&act.sa_mask);
-	act.sa_flags = SA_SIGINFO;
-	act.sa_sigaction = sighandle;
-	if (sigaction(SIGUSR1, &act, NULL) < 0)
-		return ;	
-	if (sigaction(SIGUSR2, &act, NULL) < 0)
-		return ;
 }
 
 int	check_PID(char *pid)
