@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:02:14 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/14 14:11:20 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/14 14:58:39 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,20 @@
 
 t_client clients[100];
 
-static t_client	init_client(t_client *client)
+static t_client	init_client(int pid)
 {
-
-	client->pid = 0;
-	client->msglen = 0;
-	client->msg = NULL;
-	client->c = 0;
-	client->byte_mask = 0x80;
-	client->mxint_mask = 0x7FFFFFFF;
-	return (*client);
+	t_client	client;
+	
+	client.pid = pid;
+	client.msglen = 0;
+	client.msg = NULL;
+	client.c = 0;
+	client.byte_mask = 0x80;
+	client.mxint_mask = 0x7FFFFFFF;
+	return (client);
 }
 
-static t_client	fetch_client(t_client *client, int pid, int client_table[100])
+static t_client	*fetch_client(int pid, int client_table[100])
 {
 	size_t	i;
 
@@ -34,25 +35,30 @@ static t_client	fetch_client(t_client *client, int pid, int client_table[100])
 	while (i++ < 100)
 	{
 		if (client_table[i] == pid)
-			return (clients[i]);
+			return (&clients[i]);
 	}
-	return (init_client(client));
+	i = 0;
+	while (client_table[i])
+		client_table++;
+	clients[i] = init_client(pid);
+	client_table[i] = pid;
+	return (&clients[i]);
 }
 
 void signals_handler(int sig, siginfo_t *siginfo, void *context)
 {
-	t_client	client;
+	t_client	*client;
 	static int	client_table[100];
 	static unsigned char	c = 0;
 	static int	bit_mask = 0x80;
 	static int	msglen = 0;
-	static int	bits_counter = 0;
 	static unsigned int	mxint_mask = 0b10000000000000000000000000000000;
 	static char	*msg;
+	static int	bits_counter = 0;
 	(void)context;
 
-	fetch_client(&client, siginfo->si_pid, client_table);
-
+	client = fetch_client(siginfo->si_pid, client_table);
+	//ft_printf("Client pid is %d\n", client.pid);
 	//Check struct, if pid exist fetch progression else init struct
 	//if msglen == -1 if combytescount != 4 : msglen += parse_byte()
 	//else parse msg
