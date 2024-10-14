@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:20:11 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/14 01:36:06 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/14 13:54:12 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@
 
 typedef struct s_client
 {
-	int		client_pid;
+	int		pid;
+	int		msglen;
 	char	*msg;
 	unsigned char	c;
-	int		counter;
-}			client;
+	int		byte_mask;
+	unsigned int	mxint_mask;
+}			t_client;
 
 void set_sigaction(void (sighandle)(int, siginfo_t *, void *));
 #endif
