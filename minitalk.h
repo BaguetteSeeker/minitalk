@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:20:11 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/15 02:36:20 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/15 15:58:37 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,6 @@ typedef struct s_client
 }			t_client;
 
 void	set_sigaction(void (sighandle)(int, siginfo_t *, void *));
+int		check_pid(char *pid);
+int		print_err(int code);
 #endif
