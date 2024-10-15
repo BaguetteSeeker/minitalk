@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:02:14 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/14 16:09:20 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/15 02:25:22 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,22 @@ static t_client	init_client(int pid)
 	t_client	client;
 	
 	client.pid = pid;
+	client.bits_count = 0;
 	client.msglen = 0;
 	client.msg = NULL;
 	client.c = 0;
 	client.byte_mask = 0x80;
-	client.mxint_mask = 0b1000000000000000000000000000000;
+	client.mxint_mask = 0b10000000000000000000000000000000;
 	return (client);
+}
+
+static void	clean_client(t_client *client)
+{
+	client->bits_count = 0;
+	free(client->msg);
+	client->msg = NULL;
+	client->msglen = 0;
+	client->mxint_mask = 0b10000000000000000000000000000000;
 }
 
 static t_client	*fetch_client(int pid)
@@ -33,10 +43,11 @@ static t_client	*fetch_client(int pid)
 	size_t	i;
 
 	i = 0;
-	while (i++ < 100)
+	while (i < 100)
 	{
 		if (client_table[i] == pid)
 			return (&clients[i]);
+		i++;
 	}
 	i = 0;
 	while (client_table[i])
@@ -49,25 +60,27 @@ static t_client	*fetch_client(int pid)
 void signals_handler(int sig, siginfo_t *siginfo, void *context)
 {
 	t_client	*client;
-	static int	bits_counter = 0;
 	(void)context;
 
 	client = fetch_client(siginfo->si_pid);
-	bits_counter++;
 	if (client->mxint_mask > 0)
 	{
-			//ft_printf("Msglen is %d\n", client->msglen);
+		ft_printf("Bits count is %d\n", client->bits_count);
+		client->bits_count++;
 		if (sig == SIGUSR1)
 		{
+			ft_printf("1");
 			//ft_printf("Received bit 1 \nMsglen is %d\n", client->msglen);
 			client->msglen += client->mxint_mask;
 		}
+		else
+			ft_printf("0");
 		client->mxint_mask >>= 1;
-		if (bits_counter == 32)
+		if (client->bits_count == 32)
 		{
-			ft_printf("Bits counter is %d\nClient msglen is %d\n", bits_counter, client->msglen);
+			ft_printf("Client msglen is %d\n", client->msglen);
 			client->msg = malloc((client->msglen + 1) * sizeof(char));
-			bits_counter = 0;
+			//client->bits_count = 0;
 		}
 	}
 	else
@@ -82,11 +95,7 @@ void signals_handler(int sig, siginfo_t *siginfo, void *context)
 				*(client->msg) = client->c;
 				client->msg -= client->msglen;
 				ft_putstr_fd(client->msg, 1);
-				client->mxint_mask = 0b1000000000000000000000000000000;
-				bits_counter =  0;
-				free(client->msg);
-				client->msg = NULL;
-				client->msglen = 0;
+				clean_client(client);
 				//client = NULL;
 				ft_printf("\nSuccess; Client %d transmission over;\n", client->pid);
 			}
