@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:20:11 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/14 13:54:12 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/15 02:03:18 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 typedef struct s_client
 {
 	int		pid;
-	int		msglen;
+	size_t		bits_count;
+	unsigned int	msglen;
 	char	*msg;
 	unsigned char	c;
 	int		byte_mask;
