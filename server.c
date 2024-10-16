@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:02:14 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/15 17:15:10 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/16 17:18:46 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ static t_client	*fetch_client(int pid)
 		if (client_table[i] == pid)
 			return (&g_clients[i]);
 		i++;
+	}
+	if (g_clients[i].pid > 0)
+	{
+		print_err(7);
+		exit(1);
 	}
 	i = 0;
 	while (client_table[i])
