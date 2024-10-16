@@ -6,7 +6,7 @@
 #    By: epinaud <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/25 16:30:14 by epinaud           #+#    #+#              #
-#    Updated: 2024/10/16 17:01:08 by epinaud          ###   ########.fr        #
+#    Updated: 2024/10/16 22:33:21 by epinaud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ $(EXE) :
 
 server: .obj/server.o .obj/minitalk_utils.o
 
-client: .obj/server.o .obj/minitalk_utils.o
+client: .obj/client.o .obj/minitalk_utils.o
 
 libft:
 	@git -C libft pull
