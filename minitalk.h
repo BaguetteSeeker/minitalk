@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:20:11 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/15 15:58:37 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/16 16:22:09 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 # define _POSIX_SOURCE 200809L
 # define _XOPEN_SOURCE 700
 # include "libft/libft.h"
-# include "minitalk.h"
 # include <signal.h>
 
 typedef struct s_client
