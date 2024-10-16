@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:16:17 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/16 17:56:12 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/17 00:36:07 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	set_sigaction(void (sighandle)(int, siginfo_t *, void *))
 {
 	struct sigaction	act;
 
-	ft_bzero(&act, sizeof(act));
 	sigemptyset(&act.sa_mask);
 	act.sa_flags = SA_SIGINFO;
 	act.sa_sigaction = sighandle;
@@ -57,5 +56,5 @@ int	print_err(int code)
 	else
 		msg = "Unknown error";
 	ft_putendl_fd(msg, 1);
-	return (0);
+	return (1);
 }
