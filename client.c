@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 12:29:06 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/15 17:07:49 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/16 23:27:58 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ static int	send_byte(int pid, char c)
 			if (kill(pid, SIGUSR2) < 0)
 				return (print_err(1));
 		}
-		bit >>= 1;
 		pause();
+		bit >>= 1;
 	}
 	ft_putchar_fd('\n', 1);
 	return (0);
