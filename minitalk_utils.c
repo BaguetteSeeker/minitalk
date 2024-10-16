@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:16:17 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/15 17:15:58 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/16 17:15:27 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int	print_err(int code)
 		msg = "Invalid PID";
 	else if (code == 6)
 		msg = "Invalid param count sent to client";
+	else if (code == 7)
+		msg = "Max client capacity exceeded, server is shutting down";
 	ft_putendl_fd(msg, 1);
 	return (0);
 }
