@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:16:17 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/17 13:35:43 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/18 20:20:14 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,19 @@ int	print_err(int code)
 		msg = "Unknown error";
 	ft_putendl_fd(msg, 1);
 	return (1);
+}
+
+
+t_client	init_client(int pid)
+{
+	t_client	client;
+
+	client.pid = pid;
+	client.bits_count = 0;
+	client.msglen = 0;
+	client.msg = NULL;
+	client.c = 0;
+	client.byte_mask = 0x80;
+	client.mxint_mask = 0b10000000000000000000000000000000;
+	return (client);
 }

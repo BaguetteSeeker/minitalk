@@ -6,52 +6,13 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:02:14 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/18 11:20:01 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/18 20:18:38 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
 t_client	g_clients[100];
-
-static t_client	init_client(int pid)
-{
-	t_client	client;
-
-	client.pid = pid;
-	client.bits_count = 0;
-	client.msglen = 0;
-	client.msg = NULL;
-	client.c = 0;
-	client.byte_mask = 0x80;
-	client.mxint_mask = 0b10000000000000000000000000000000;
-	return (client);
-}
-
-static t_client	*fetch_client(int pid)
-{
-	static int	client_table[100];
-	size_t		i;
-
-	i = 0;
-	while (i < 100)
-	{
-		if (client_table[i] == pid)
-			return (&g_clients[i]);
-		i++;
-	}
-	if (g_clients[i].pid > 0)
-	{
-		print_err(7);
-		exit(1);
-	}
-	i = 0;
-	while (client_table[i])
-		i++;
-	g_clients[i] = init_client(pid);
-	client_table[i] = pid;
-	return (&g_clients[i]);
-}
 
 static void	append_msgbyte(t_client *client)
 {
@@ -90,6 +51,7 @@ static void	signals_handler(int sig, siginfo_t *siginfo, void *context)
 		client->mxint_mask >>= 1;
 		if (client->bits_count == 32)
 		{
+			//ft_putnbr_fd(client->msglen, 1);
 			client->msg = malloc((client->msglen + 1) * sizeof(char));
 			if (!client->msg)
 				exit(print_err(8));
@@ -103,7 +65,7 @@ static void	signals_handler(int sig, siginfo_t *siginfo, void *context)
 		if (client->byte_mask == 0)
 			append_msgbyte(client);
 	}
-	//usleep(25);
+	//usleep(50);
 	if (kill(siginfo->si_pid, SIGUSR2) == -1)
 		print_err(2);
 	//ft_putchar_fd(' ', 1);
