@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 12:29:06 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/16 23:27:58 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/18 14:53:32 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,20 @@ static int	send_byte(int pid, char c)
 	{
 		if (bit & (unsigned char)c)
 		{
-			ft_printf("1");
+			//ft_putchar_fd('1', 1);
 			if (kill(pid, SIGUSR1) < 0)
-				return (print_err(1));
+				exit(print_err(1));
 		}
 		else
 		{
-			ft_printf("0");
+			//ft_putchar_fd('0', 1);
 			if (kill(pid, SIGUSR2) < 0)
-				return (print_err(1));
+				exit(print_err(1));
 		}
 		pause();
 		bit >>= 1;
 	}
-	ft_putchar_fd('\n', 1);
+	//ft_putchar_fd('\n', 1);
 	return (0);
 }
 
@@ -87,17 +87,20 @@ void	signals_handler(int sig, siginfo_t *siginfo, void *context)
 {
 	(void) context;
 	if (sig == SIGUSR1)
-		ft_printf("\nMessage fully printed by client %d\n", siginfo->si_pid);
+		ft_printf("\nMessage fully printed by server %d\n", siginfo->si_pid);
+	else if (sig == SIGUSR2)
+		ft_putchar_fd('b', 1);
 }
 
 int	main(int argc, char *argv[])
 {
 	if (argc != 3)
 		return (print_err(4));
-	else if (ft_strlen(argv[1]) < 1)
+	else if (ft_strlen(argv[1]) < 1 || check_pid(argv[1]))
 		return (print_err(5));
-	else if (check_pid(argv[1]))
+	else if (!argv[2][0])
 		return (print_err(6));
+	ft_printf("Client starting..\n PID -> %d\n", getpid());
 	set_sigaction(&signals_handler);
 	send_strasbin(ft_atoi(argv[1]), argv[2]);
 	return (0);

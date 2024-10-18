@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:16:17 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/17 00:36:07 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/17 13:35:43 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	print_err(int code)
 	else if (code == 5)
 		msg = "Invalid PID";
 	else if (code == 6)
-		msg = "Invalid param count sent to client";
+		msg = "Empty client message";
 	else if (code == 7)
 		msg = "Max client capacity exceeded, server is shutting down";
 	else

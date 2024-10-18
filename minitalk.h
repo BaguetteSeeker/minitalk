@@ -6,14 +6,12 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:20:11 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/16 16:22:09 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/17 12:41:43 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINITALK_H
 # define MINITALK_H
-# define _POSIX_SOURCE 200809L
-# define _XOPEN_SOURCE 700
 # include "libft/libft.h"
 # include <signal.h>
 

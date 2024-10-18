@@ -6,7 +6,7 @@
 #    By: epinaud <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/25 16:30:14 by epinaud           #+#    #+#              #
-#    Updated: 2024/10/16 22:33:21 by epinaud          ###   ########.fr        #
+#    Updated: 2024/10/17 14:28:27 by epinaud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ EXE = server client
 
 LDLIBS = libft/libft.a
 
-CFLAGS = -Wall -Wextra -Werror -I. -Ilibft/printf
+CFLAGS = -Wall -Wextra -Werror -I. -Ilibft/printf -ggdb3
 
 OBJ_DIR = .obj
 

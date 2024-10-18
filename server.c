@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:02:14 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/16 17:18:46 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/18 11:20:01 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void	append_msgbyte(t_client *client)
 	{
 		*(client->msg) = client->c;
 		client->msg -= client->msglen;
-		ft_putstr_fd(client->msg, 1);
+		ft_putendl_fd(client->msg, 1);
 		free(client->msg);
 		*client = init_client(client->pid);
 		if (client->pid == 0)
@@ -79,6 +79,8 @@ static void	signals_handler(int sig, siginfo_t *siginfo, void *context)
 	t_client	*client;
 
 	(void)context;
+	if (siginfo->si_pid == 0)
+		return (exit(print_err(3)));
 	client = fetch_client(siginfo->si_pid);
 	if (client->mxint_mask > 0)
 	{
@@ -87,7 +89,11 @@ static void	signals_handler(int sig, siginfo_t *siginfo, void *context)
 			client->msglen += client->mxint_mask;
 		client->mxint_mask >>= 1;
 		if (client->bits_count == 32)
+		{
 			client->msg = malloc((client->msglen + 1) * sizeof(char));
+			if (!client->msg)
+				exit(print_err(8));
+		}
 	}
 	else
 	{
@@ -97,10 +103,10 @@ static void	signals_handler(int sig, siginfo_t *siginfo, void *context)
 		if (client->byte_mask == 0)
 			append_msgbyte(client);
 	}
-	if (siginfo->si_pid == 0)
-		print_err(3);
+	//usleep(25);
 	if (kill(siginfo->si_pid, SIGUSR2) == -1)
 		print_err(2);
+	//ft_putchar_fd(' ', 1);
 }
 
 int	main(void)
