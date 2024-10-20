@@ -6,7 +6,7 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:16:17 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/18 20:20:14 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/20 03:58:01 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ int	print_err(int code)
 	char	*msg;
 
 	if (code == 1)
-		msg = "Error during signal transmission : transfer aborted";
+		msg = "Client: Signal transmission aborted";
 	else if (code == 2)
-		msg = "Failled to return signal (to client)";
+		msg = "Server: Failled to return signal (to client)";
 	else if (code == 3)
 		msg = "Server missing client's PID";
 	else if (code == 4)
@@ -53,12 +53,13 @@ int	print_err(int code)
 		msg = "Empty client message";
 	else if (code == 7)
 		msg = "Max client capacity exceeded, server is shutting down";
+	else if (code == 8)
+		msg = "Server: Failled to allocate memory for client message";
 	else
 		msg = "Unknown error";
 	ft_putendl_fd(msg, 1);
 	return (1);
 }
-
 
 t_client	init_client(int pid)
 {
