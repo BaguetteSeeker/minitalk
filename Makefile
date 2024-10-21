@@ -6,7 +6,7 @@
 #    By: epinaud <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/25 16:30:14 by epinaud           #+#    #+#              #
-#    Updated: 2024/10/17 14:28:27 by epinaud          ###   ########.fr        #
+#    Updated: 2024/10/21 16:08:11 by epinaud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,14 +14,16 @@ EXE = server client
 
 LDLIBS = libft/libft.a
 
-CFLAGS = -Wall -Wextra -Werror -I. -Ilibft/printf -ggdb3
+CFLAGS = -Wall -Wextra -Werror
+
+INCLUDES = -I. -Ilibft -Ilibft/printf
 
 OBJ_DIR = .obj
 
 CC = cc -D_XOPEN_SOURCE=700
 
 $(OBJ_DIR)/%.o : %.c
-	$(CC) -c $(CFLAGS) $< -o $@
+	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
 
 all: libft $(OBJ_DIR) $(EXE)
 

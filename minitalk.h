@@ -6,13 +6,13 @@
 /*   By: epinaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:20:11 by epinaud           #+#    #+#             */
-/*   Updated: 2024/10/20 03:17:45 by epinaud          ###   ########.fr       */
+/*   Updated: 2024/10/21 14:14:05 by epinaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINITALK_H
 # define MINITALK_H
-# include "libft/libft.h"
+# include "libft.h"
 # include <signal.h>
 
 typedef struct s_client
